@@ -44,6 +44,7 @@ button,
 textarea,
 select {
   font: inherit;
+  font-family: "Poppins", sans-serif;
 }
 /*
   7. Avoid text overflows
@@ -56,6 +57,7 @@ h4,
 h5,
 h6 {
   overflow-wrap: break-word;
+  font-family: "Poppins", sans-serif;
 }
 /*
   8. Create a root stacking context
@@ -107,4 +109,8 @@ a {
 
 .sections-wrapper {
   display: flex;
+}
+
+.pagination-center {
+  margin: 0 auto;
 }
