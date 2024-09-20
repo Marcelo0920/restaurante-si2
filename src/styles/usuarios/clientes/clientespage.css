@@ -1,0 +1,50 @@
+.clientes-page {
+  width: 85vw;
+  margin: 40px auto;
+}
+
+.clientes-page-h2 {
+  text-align: center;
+}
+
+.clientes-page-control-buttons {
+  display: flex;
+  justify-content: end;
+  margin-top: 30px;
+  margin-right: 35px;
+}
+
+.clientes-page-control-buttons input {
+  margin-right: 30px;
+  border-style: none;
+  border-radius: 20px;
+  padding-left: 15px;
+  width: 270px;
+}
+
+.clientes-list {
+  width: 100%;
+}
+
+.clientes-grid {
+  display: grid;
+  grid-template-columns: 1fr 3fr 2fr 2fr;
+  gap: 10px;
+  align-items: center;
+  padding: 10px;
+}
+
+.clientes-header {
+  font-weight: bold;
+  background-color: #f0f0f0;
+}
+
+.clientes-page-control-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.clientes-page-h2 {
+  margin-bottom: 20px;
+}

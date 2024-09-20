@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
-
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 import { MdEmail } from "react-icons/md";
 import { FaLock } from "react-icons/fa";
+
+import { login } from "../actions/auth";
 
 import heroLogin from "../assets/heroLogin.jpg";
 
@@ -10,24 +13,24 @@ import "react-toastify/dist/ReactToastify.css";
 import "../styles/login/login.css";
 import ButtonLoader from "../components/loaders/ButtonLoader";
 
-const Login = () => {
+const Login = ({ login, isAuthenticated, loading, error }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
-  /* useEffect(() => {
+  useEffect(() => {
     if (error == "Bad Login") {
       toast.error("Error al iniciar sesion", { theme: "light" });
     }
-  }, [error]); */
+  }, [error]);
 
   const { email, password } = formData;
 
   const onSubmit = async (e) => {
     e.preventDefault();
 
-    //login(email, password);
+    login(email, password);
   };
 
   const onChange = (e) => {
@@ -35,9 +38,9 @@ const Login = () => {
   };
 
   //redirecting if logged
-  /*  if (isAuthenticated) {
-        return <Navigate to="/" replace />;
-      } */
+  if (isAuthenticated) {
+    return <Navigate to="/" replace />;
+  }
 
   return (
     <div>
@@ -75,8 +78,7 @@ const Login = () => {
               </div>
             </div>
             <button className="buttonLogin" type="submit" value="Login">
-              {/* {loading ? <ButtonLoader /> : "Iniciar Sesión"} */}
-              <ButtonLoader />
+              {loading ? <ButtonLoader /> : "Iniciar Sesión"}
             </button>
           </form>
         </section>
@@ -88,4 +90,17 @@ const Login = () => {
   );
 };
 
-export default Login;
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+  loading: state.auth.loading,
+  error: state.auth.error,
+});
+
+Login.propTypes = {
+  login: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool,
+  loading: PropTypes.bool,
+  error: PropTypes.string,
+};
+
+export default connect(mapStateToProps, { login })(Login);

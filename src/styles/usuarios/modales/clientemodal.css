@@ -1,0 +1,28 @@
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.modal-form {
+  margin: 20px 0px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal-form div {
+  margin-bottom: 50px;
+}
+
+.modal-input input {
+  border-style: none;
+  border-radius: 15px;
+  border: 1px solid black;
+  padding: 5px 10px;
+}
+
+.modal-input input:first-child {
+  margin-right: 15px;
+}

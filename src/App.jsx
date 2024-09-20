@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
@@ -10,7 +10,20 @@ import Personal from "./pages/Personal";
 import Roles from "./pages/Roles";
 import Ventas from "./pages/Ventas";
 
+import Cookies from "js-cookie";
+import setAuthToken from "./utils/setAuthToken";
+import store from "./store";
+import { loadUser } from "./actions/auth";
+
+if (Cookies.get("token")) {
+  setAuthToken(Cookies.get("token"));
+}
+
 function App() {
+  useEffect(() => {
+    store.dispatch(loadUser());
+  }, []);
+
   return (
     <BrowserRouter>
       <Routes>
