@@ -24,8 +24,6 @@ const Pagination = ({ totalPosts, postsPerPage, setCurrentPage }) => {
       });
     });
 
-    console.log("me renderizo");
-
     // Cleanup to remove event listeners when the component is unmounted or re-rendered
     return () => {
       indexs.forEach((index) => {

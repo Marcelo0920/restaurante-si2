@@ -7,11 +7,9 @@ import {
   LOGIN_START,
 } from "../actions/types";
 
-import Cookies from "js-cookie";
-
 const initialState = {
-  token: Cookies.get("token"),
-  isAuthenticated: null,
+  token: localStorage.getItem("token"),
+  isAuthenticated: false,
   loading: false,
   loginSuccess: false,
   user: null,
@@ -40,10 +38,12 @@ export default function (state = initialState, action) {
       };
 
     case LOGIN_SUCCESS:
-      Cookies.set("sec", payload.token, { expires: 7 });
+      localStorage.setItem("token", payload.token);
       return {
         ...state,
+        token: payload.token,
         payload,
+        user: payload.email,
         isAuthenticated: true,
         loginSuccess: true,
         loading: false,
@@ -51,7 +51,7 @@ export default function (state = initialState, action) {
       };
 
     case LOGIN_FAILED:
-      Cookies.remove("sec");
+      localStorage.removeItem("token");
       return {
         ...state,
         payload,
@@ -62,7 +62,7 @@ export default function (state = initialState, action) {
 
     case AUTH_ERROR:
     case LOG_OUT:
-      Cookies.remove("sec");
+      localStorage.removeItem("token");
       return {
         ...state,
         token: null,

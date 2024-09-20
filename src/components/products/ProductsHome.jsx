@@ -6,15 +6,11 @@ import "../../styles/products/productshome.css";
 import Pagination from "../pagination/pagination";
 
 const ProductsHome = () => {
-  function handleClick() {
-    console.log("ME HAS CLICKEADO");
-  }
-
   return (
     <div className="products-home-container">
       <SearchBar />
       <div className="products-list">
-        <ProductItem onClick={handleClick} />
+        <ProductItem />
         <ProductItem />
         <ProductItem />
         <ProductItem />

@@ -1,25 +1,46 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ClienteItem from "./ClienteItem";
 import "../../../styles/usuarios/clientes/clientespage.css";
 import ClienteCreateModal from "../modales/ClienteCreateModal";
 import ClienteEditModal from "../modales/ClienteEditModal";
 import ClienteDeleteModal from "../modales/ClienteDeleteModal";
 
-const ClientesPage = () => {
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+
+import { getClientes } from "../../../actions/clientes";
+
+const ClientesPage = ({ getClientes, cliente: { clientes, loading } }) => {
   const [openCreateModal, setCreateOpenModal] = useState(false);
   const [openEditModal, setEditOpenModal] = useState(false);
   const [openDeleteModal, setDeleteOpenModal] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedClientId, setSelectedClientId] = useState(null);
 
-  function handleCreateModal() {
-    setCreateOpenModal(!openCreateModal);
-  }
+  useEffect(() => {
+    getClientes();
+  }, [getClientes]);
 
-  function handleDeleteModal() {
-    setDeleteOpenModal(!openDeleteModal);
-  }
-
-  function handleEditModal() {
+  const handleCreateModal = () => setCreateOpenModal(!openCreateModal);
+  const handleEditModal = (id) => {
+    setSelectedClientId(id);
     setEditOpenModal(!openEditModal);
+  };
+  const handleDeleteModal = (id) => {
+    setSelectedClientId(id);
+    setDeleteOpenModal(!openDeleteModal);
+  };
+
+  const filteredClientes = clientes.filter(
+    (cliente) =>
+      `${cliente.nombre} ${cliente.apellido}`
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      cliente.email.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  if (loading) {
+    return <div>Cargando...</div>;
   }
 
   return (
@@ -28,20 +49,25 @@ const ClientesPage = () => {
         open={openCreateModal}
         onClose={() => setCreateOpenModal(false)}
       />
-
       <ClienteEditModal
         open={openEditModal}
         onClose={() => setEditOpenModal(false)}
+        clientId={selectedClientId}
       />
       <ClienteDeleteModal
         open={openDeleteModal}
         onClose={() => setDeleteOpenModal(false)}
+        clientId={selectedClientId}
       />
 
       <div className="clientes-page">
         <h2 className="clientes-page-h2">Nuestros Clientes</h2>
         <div className="clientes-page-control-buttons">
-          <input placeholder="Buscar Cliente" />
+          <input
+            placeholder="Buscar Cliente"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
           <button className="create-button" onClick={handleCreateModal}>
             Crear
           </button>
@@ -50,32 +76,24 @@ const ClientesPage = () => {
           <div className="clientes-grid clientes-header">
             <span>Id</span>
             <span>Nombre</span>
-            <span>Nit</span>
+            <span>Email</span>
+            <span>Rol</span>
             <span>Acciones</span>
           </div>
 
           <div className="clientes-items">
-            <ClienteItem
-              id="01"
-              nombre="Marcelo Vargas Avila"
-              nit="2985267"
-              onEdit={handleEditModal}
-              onDelete={handleDeleteModal}
-            />
-            <ClienteItem
-              id="02"
-              nombre="Ana Perez Lopez"
-              nit="3456789"
-              onEdit={handleEditModal}
-              onDelete={handleDeleteModal}
-            />
-            <ClienteItem
-              id="03"
-              nombre="Carlos Gomez Rodriguez"
-              nit="5678901"
-              onEdit={handleEditModal}
-              onDelete={handleDeleteModal}
-            />
+            {filteredClientes.map((cliente) => (
+              <ClienteItem
+                key={cliente.id}
+                id={cliente.id}
+                nombre={cliente.nombre}
+                apellido={cliente.apellido}
+                email={cliente.email}
+                rol={cliente.rol}
+                onEdit={handleEditModal}
+                onDelete={handleDeleteModal}
+              />
+            ))}
           </div>
         </div>
       </div>
@@ -83,4 +101,13 @@ const ClientesPage = () => {
   );
 };
 
-export default ClientesPage;
+ClientesPage.propTypes = {
+  getClientes: PropTypes.func.isRequired,
+  cliente: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  cliente: state.cliente,
+});
+
+export default connect(mapStateToProps, { getClientes })(ClientesPage);

@@ -6,31 +6,26 @@ import {
   LOG_OUT,
   AUTH_ERROR,
   LOGIN_START,
+  DEFAULT_SESSION,
 } from "./types";
 
 import setAuthToken from "../utils/setAuthToken";
-import Cookies from "js-cookie";
 
 //LOAD USER
 export const loadUser = () => async (dispatch) => {
-  const token = Cookies.get("sec");
-
-  console.log("trying to get user");
-
   const config = {
     headers: {
       "Content-Type": "application/json",
-      sec: Cookies.get("sec"),
     },
   };
 
-  if (token) {
-    setAuthToken(token);
+  if (localStorage.token) {
+    setAuthToken(localStorage.token);
 
     try {
       console.log("trying this");
       const res = await axios.get(
-        "http://localhost:5000/usuarios/loaduser",
+        "http://3.131.137.53:8080/pos/auth/login",
         config
       );
 
@@ -49,14 +44,14 @@ export const loadUser = () => async (dispatch) => {
 };
 
 //LOGIN
-export const login = (correo, password) => async (dispatch) => {
+export const login = (username, password) => async (dispatch) => {
   const config = {
     headers: {
       "Content-Type": "application/json",
     },
   };
 
-  const body = JSON.stringify({ correo, password });
+  const body = JSON.stringify({ username, password });
 
   dispatch({
     type: LOGIN_START,
@@ -64,7 +59,7 @@ export const login = (correo, password) => async (dispatch) => {
 
   try {
     const res = await axios.post(
-      "http://localhost:5000/usuarios/login",
+      "http://3.131.137.53:8080/pos/auth/login",
       body,
       config
     );
@@ -76,9 +71,9 @@ export const login = (correo, password) => async (dispatch) => {
       payload: res.data,
     });
 
-    dispatch(loadUser());
+    /* dispatch(loadUser()); */
   } catch (error) {
-    console.log(error.response.data.error);
+    console.log(error);
 
     dispatch({
       type: LOGIN_FAILED,

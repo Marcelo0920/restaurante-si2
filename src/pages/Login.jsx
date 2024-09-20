@@ -12,12 +12,15 @@ import heroLogin from "../assets/heroLogin.jpg";
 import "react-toastify/dist/ReactToastify.css";
 import "../styles/login/login.css";
 import ButtonLoader from "../components/loaders/ButtonLoader";
+import { Navigate } from "react-router-dom";
 
 const Login = ({ login, isAuthenticated, loading, error }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+
+  console.log("cargando login");
 
   useEffect(() => {
     if (error == "Bad Login") {

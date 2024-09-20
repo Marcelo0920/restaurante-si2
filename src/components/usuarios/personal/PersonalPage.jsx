@@ -17,7 +17,6 @@ const PersonalPage = () => {
   }
 
   function handleDeleteModal() {
-    console.log("holaa");
     setDeleteOpenModal(!openDeleteModal);
   }
 

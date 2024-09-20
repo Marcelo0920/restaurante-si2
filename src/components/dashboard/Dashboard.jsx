@@ -10,10 +10,14 @@ import { BsPatchCheckFill } from "react-icons/bs";
 import { MdLogout } from "react-icons/md";
 import { IoHomeSharp } from "react-icons/io5";
 
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { logout } from "../../actions/auth";
+
 import "../../styles/dashboard/dashboard.css";
 import { Link } from "react-router-dom";
 
-const Dashboard = () => {
+const Dashboard = ({ logout }) => {
   return (
     <div>
       <ul className="dashboard-ul">
@@ -66,7 +70,7 @@ const Dashboard = () => {
           </Link>
         </li>
         <li>
-          <Link to="/" className="dashboard-li-component">
+          <Link to="/" className="dashboard-li-component" onClick={logout}>
             <MdLogout />
             <span>Cerrar Sesion</span>
           </Link>
@@ -76,4 +80,12 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+Dashboard.propTypes = {
+  logout: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  logout: state.articulo,
+});
+
+export default connect(mapStateToProps, { logout })(Dashboard);
